@@ -70,14 +70,14 @@ echo [OK] Desktop shortcut created.
 
 echo.
 echo  [36m╔══════════════════════════════════════════════════════════════════════╗[0m
-echo  [36m║[0m              [32mNOTEBOOK INSTALLATION COMPLETE[0m                       [36m║[0m
+echo  [36m║[0m              [32mNOTEBOOK INSTALLATION COMPLETE[0m        [36m║[0m
 echo  [36m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [36m║[0m Version   : [32m%VERSION%[0m                                                 [36m║[0m
-echo  [36m║[0m Author    : [32m%AUTHOR%[0m                                     [36m║[0m
-echo  [36m║[0m Location  : [32m%INSTALL_DIR%[0m                                         [36m║[0m
-echo  [36m║[0m Command   : [33mnotebook[0m                                              [36m║[0m
-echo  [36m║[0m                                                                      [36m║[0m
-echo  [36m║[0m Open a new Command Prompt and type: [33mnotebook[0m                         [36m║[0m
+echo  [36m║[0m Version   : [32m%VERSION%[0m                              [36m║[0m
+echo  [36m║[0m Author    : [32m%AUTHOR%[0m                               [36m║[0m
+echo  [36m║[0m Location  : [32m%INSTALL_DIR%[0m                          [36m║[0m
+echo  [36m║[0m Command   : [33mnotebook[0m                               [36m║[0m
+echo  [36m║[0m                                                             [36m║[0m
+echo  [36m║[0m Open a new Command Prompt and type: [33mnotebook[0m       [36m║[0m
 echo  [36m╚══════════════════════════════════════════════════════════════════════╝[0m
 echo.
 pause
@@ -87,40 +87,40 @@ exit /b 0
 cls
 echo.
 echo  [36m╔══════════════════════════════════════════════════════════════╗[0m
-echo  [36m║                      ╔══════════════╗                       ║[0m
-echo  [36m║                      ║   NOTEBOOK   ║                       ║[0m
-echo  [36m║                      ╚══════════════╝                       ║[0m
+echo  [36m║                      ╔══════════════╗                        ║[0m
+echo  [36m║                      ║   NOTEBOOK   ║                        ║[0m
+echo  [36m║                      ╚══════════════╝                        ║[0m
 echo  [36m║                                                              ║[0m
-echo  [36m║  A modern terminal text editor for developers               ║[0m
+echo  [36m║  A modern terminal text editor for developers                ║[0m
 echo  [36m╚══════════════════════════════════════════════════════════════╝[0m
 echo.
 echo  [34m╔══════════════════════════════════════════════════════════════════════╗[0m
-echo  [34m║                         ABOUT NOTEBOOK                             ║[0m
+echo  [34m║                         ABOUT NOTEBOOK                               ║[0m
 echo  [34m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [34m║[0m Project              : [32mNotebook                                       [0m[34m║[0m
-echo  [34m║[0m Version              : [32m%VERSION%                                          [0m[34m║[0m
-echo  [34m║[0m Developer            : [32m%AUTHOR%                             [0m[34m║[0m
-echo  [34m║[0m License              : [32mMIT                                            [0m[34m║[0m
-echo  [34m║[0m GitHub               : [36m%GITHUB_URL%               [0m[34m║[0m
-echo  [34m║[0m Global Command       : [33mnotebook                                       [0m[34m║[0m
-echo  [34m║[0m Language             : [37mC (C99)                                        [0m[34m║[0m
+echo  [34m║[0m Project              : [32mNotebook                    [0m[34m║[0m
+echo  [34m║[0m Version              : [32m%VERSION%                   [0m[34m║[0m
+echo  [34m║[0m Developer            : [32m%AUTHOR%                    [0m[34m║[0m
+echo  [34m║[0m License              : [32mMIT                         [0m[34m║[0m
+echo  [34m║[0m GitHub               : [36m%GITHUB_URL%                [0m[34m║[0m
+echo  [34m║[0m Global Command       : [33mnotebook                    [0m[34m║[0m
+echo  [34m║[0m Language             : [37mC (C99)                     [0m[34m║[0m
 echo  [34m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [34m║[0m Description                                                          [34m║[0m
-echo  [34m║[0m A lightweight, modern, cross-platform terminal text editor.          [34m║[0m
+echo  [34m║[0m Description                                                 [34m║[0m
+echo  [34m║[0m A lightweight, modern, cross-platform terminal text editor. [34m║[0m
 echo  [34m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [34m║[0m Features                                                             [34m║[0m
-echo  [34m║[0m  [32m✦[0m Multi-buffer editing                                               [34m║[0m
-echo  [34m║[0m  [32m✦[0m Syntax highlighting                                                [34m║[0m
-echo  [34m║[0m  [32m✦[0m Search and replace                                                 [34m║[0m
-echo  [34m║[0m  [32m✦[0m Undo / Redo                                                        [34m║[0m
-echo  [34m║[0m  [32m✦[0m Plugin support                                                     [34m║[0m
-echo  [34m║[0m  [32m✦[0m Themes                                                             [34m║[0m
-echo  [34m║[0m  [32m✦[0m Cross-platform                                                     [34m║[0m
+echo  [34m║[0m Features                                                    [34m║[0m
+echo  [34m║[0m  [32m✦[0m Multi-buffer editing                            [34m║[0m
+echo  [34m║[0m  [32m✦[0m Syntax highlighting                             [34m║[0m
+echo  [34m║[0m  [32m✦[0m Search and replace                              [34m║[0m
+echo  [34m║[0m  [32m✦[0m Undo / Redo                                     [34m║[0m
+echo  [34m║[0m  [32m✦[0m Plugin support                                  [34m║[0m
+echo  [34m║[0m  [32m✦[0m Themes                                          [34m║[0m
+echo  [34m║[0m  [32m✦[0m Cross-platform                                  [34m║[0m
 echo  [34m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [34m║[0m Supported Platforms                                                  [34m║[0m
-echo  [34m║[0m  Windows   Linux   macOS   BSD   Termux                             [34m║[0m
+echo  [34m║[0m Supported Platforms                                         [34m║[0m
+echo  [34m║[0m  Windows   Linux   macOS   BSD   Termux                     [34m║[0m
 echo  [34m╠══════════════════════════════════════════════════════════════════════╣[0m
-echo  [34m║[0m                  [32mThank you for using Notebook![0m                        [34m║[0m
+echo  [34m║[0m                  [32mThank you for using Notebook![0m     [34m║[0m
 echo  [34m╚══════════════════════════════════════════════════════════════════════╝[0m
 echo.
 goto :eof
