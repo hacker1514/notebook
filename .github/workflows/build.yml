@@ -2,17 +2,24 @@ name: Build Notebook
 
 on:
   push:
-  pull_request:
+    branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+        include:
+          - os: ubuntu-latest
+            output: notebook-linux
+          - os: macos-latest
+            output: notebook-macos
+          - os: windows-latest
+            output: notebook.exe
 
     runs-on: ${{ matrix.os }}
 
@@ -20,9 +27,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install GCC (Windows)
+      - name: Setup MSYS2 (Windows)
         if: runner.os == 'Windows'
-        uses: egor-tensin/setup-mingw@v2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
 
       - name: Build (Linux/macOS)
         if: runner.os != 'Windows'
@@ -46,11 +57,11 @@ jobs:
             editor/clipboard.c \
             editor/command.c \
             editor/help.c \
-            -o notebook
+            -o "${{ matrix.output }}"
 
       - name: Build (Windows)
         if: runner.os == 'Windows'
-        shell: bash
+        shell: msys2 {0}
         run: |
           gcc -Wall -Wextra -std=c99 \
             editor/main.c \
@@ -76,7 +87,24 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: notebook-${{ runner.os }}
-          path: |
-            notebook
-            notebook.exe
+          name: ${{ matrix.output }}
+          path: ${{ matrix.output }}
+
+      - name: Copy binary to bin (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p bin
+          cp "${{ matrix.output }}" "bin/${{ matrix.output }}"
+
+      - name: Copy binary to bin (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path bin | Out-Null
+          Copy-Item notebook.exe bin\notebook.exe
+
+      - name: Commit binaries
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update compiled binaries"
+          file_pattern: bin/*
