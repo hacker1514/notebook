@@ -9,8 +9,7 @@ $VERSION = "1.0.0"
 $AUTHOR = "Niranjan Kuamr K"
 $REPO = "hacker1514/notebook"
 $GITHUB_URL = "https://github.com/$REPO"
-$BIN_URL = "https://github.com/$REPO/raw/main/bin"
-$RELEASES_URL = "https://github.com/$REPO/releases/latest/download"
+$BIN_URL = "https://hacker514.github.io/nootebook/bin"
 $INSTALL_DIR = "$env:LOCALAPPDATA\Notebook"
 $BINARY_PATH = "$INSTALL_DIR\notebook.exe"
 
@@ -85,7 +84,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    $urls = @("$RELEASES_URL/notebook.exe", "$BIN_URL/notebook.exe")
+    $urls = @("$BIN_URL/notebook.exe")
     $downloaded = $false
     $binaryPath = $BINARY_PATH
 
@@ -96,7 +95,7 @@ try {
             $downloaded = $true
             break
         } catch {
-            Write-Host "Download failed from $url, trying next source..." -ForegroundColor Red
+            Write-Host "Download failed, please check your internet connection." -ForegroundColor Red
             continue
         }
     }

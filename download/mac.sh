@@ -4,36 +4,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib.sh"
 
-DETECTED_OS=$(detect_os)
 DETECTED_ARCH=$(detect_arch)
-
-require_root "$@"
 
 about_notebook
 
 echo ""
-printf "${YELLOW}Detected OS: ${WHITE}%s${RESET}\n" "$DETECTED_OS"
+printf "${YELLOW}Detected OS: ${WHITE}macOS${RESET}\n"
 printf "${YELLOW}Detected Architecture: ${WHITE}%s${RESET}\n" "$DETECTED_ARCH"
-echo ""
-
-case "$DETECTED_OS" in
-    ubuntu|debian|linuxmint|pop|elementary|zorin)
-        if command -v apt-get >/dev/null 2>&1; then
-            DISTRO="debian"
-        fi
-        ;;
-    fedora) DISTRO="fedora" ;;
-    arch|manjaro|endeavouros|artix) DISTRO="arch" ;;
-    alpine) DISTRO="alpine" ;;
-    centos|rhel|rocky|almalinux) DISTRO="rhel" ;;
-    opensuse|suse) DISTRO="opensuse" ;;
-    raspbian) DISTRO="raspberrypi" ;;
-    *)
-        DISTRO="linux"
-        ;;
-esac
-
-printf "${YELLOW}Distribution: ${WHITE}%s${RESET}\n" "$DISTRO"
 echo ""
 
 read -p "Continue with installation? (Y/N): " CONFIRM
@@ -43,21 +20,17 @@ if [ "$CONFIRM" != "Y" ] && [ "$CONFIRM" != "y" ]; then
 fi
 
 echo ""
-printf "${CYAN}[_] Installing Notebook...${RESET}\n"
+printf "${CYAN}[_] Installing Notebook on macOS...${RESET}\n"
 echo ""
 
 check_internet || exit 1
 
-BINARY_NAME=$(get_binary_name "linux" "$DETECTED_ARCH")
-ARCH_SUFFIX=$(get_arch_suffix "$DETECTED_ARCH")
+BINARY_NAME=$(get_binary_name "macos" "$DETECTED_ARCH")
 
 TMP_DIR=$(mktemp -d)
 BINARY_PATH="${TMP_DIR}/notebook"
 
-URLS=(
-    "${BIN_URL}/${BINARY_NAME}"
-)
-
+URLS=("${BIN_URL}/${BINARY_NAME}")
 DOWNLOADED=0
 for URL in "${URLS[@]}"; do
     printf "${YELLOW}Downloading from: %s${RESET}\n" "$URL"
@@ -80,20 +53,16 @@ if ! verify_binary "$BINARY_PATH"; then
 fi
 
 chmod +x "$BINARY_PATH"
-cp "$BINARY_PATH" "${INSTALL_DIR}/notebook"
 
-if [ -f /etc/ld.so.conf.d/ ]; then
-    ldconfig 2>/dev/null || true
+if [ "$(id -u)" -ne 0 ]; then
+    printf "${YELLOW}Root privileges required. Re-running with sudo...${RESET}\n"
+    sudo cp "$BINARY_PATH" /usr/local/bin/notebook
+else
+    cp "$BINARY_PATH" /usr/local/bin/notebook
 fi
 
-if [ ! -L /usr/local/bin/notebook ]; then
-    ln -sf "${INSTALL_DIR}/notebook" /usr/local/bin/notebook 2>/dev/null || true
-fi
-
-printf "${GREEN}✓ Notebook installed to ${INSTALL_DIR}/notebook${RESET}\n"
-printf "${GREEN}✓ Symlink created at /usr/local/bin/notebook${RESET}\n"
-
-which notebook >/dev/null 2>&1 && printf "${GREEN}✓ Global command 'notebook' is available${RESET}\n"
+printf "${GREEN}✓ Notebook installed to /usr/local/bin/notebook${RESET}\n"
+which notebook > /dev/null 2>&1 && printf "${GREEN}✓ Global command 'notebook' is available${RESET}\n"
 
 echo ""
 printf "${GREEN}╔══════════════════════════════════════════════════════════════╗${RESET}\n"
@@ -101,11 +70,10 @@ printf "${GREEN}║                NOTEBOOK INSTALLATION COMPLETE               
 printf "${GREEN}╠══════════════════════════════════════════════════════════════╣${RESET}\n"
 printf "${GREEN}║ Version   : %-49s║${RESET}\n" "${VERSION}"
 printf "${GREEN}║ Author    : %-49s║${RESET}\n" "${AUTHOR}"
-printf "${GREEN}║ Location  : %-49s║${RESET}\n" "${INSTALL_DIR}/notebook"
+printf "${GREEN}║ Location  : %-49s║${RESET}\n" "/usr/local/bin/notebook"
 printf "${GREEN}║ Command   : %-49s║${RESET}\n" "notebook"
 printf "${GREEN}║                                                              ║${RESET}\n"
 printf "${GREEN}║ %-61s║${RESET}\n" "Type 'notebook' to start editing."
 printf "${GREEN}╚══════════════════════════════════════════════════════════════╝${RESET}\n"
 
 rm -rf "$TMP_DIR"
-

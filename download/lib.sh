@@ -2,8 +2,7 @@ VERSION="1.0.0"
 AUTHOR="Niranjan Kuamr K"
 REPO="hacker1514/notebook"
 GITHUB_URL="https://github.com/${REPO}"
-BIN_URL="https://github.com/${REPO}/raw/main/bin"
-RELEASES_URL="https://github.com/${REPO}/releases/latest/download"
+BIN_URL="https://hacker514.github.io/nootebook/bin"
 LICENSE="MIT"
 DESCRIPTION="A lightweight, modern, cross-platform terminal text editor."
 FEATURES="Multi-buffer editing|Syntax highlighting|Search & replace|Undo / Redo|Plugin support|Themes|Cross-platform"
@@ -139,12 +138,10 @@ get_binary_name() {
     local os=$1
     local arch=$2
     case "$os" in
-        linux|ubuntu|debian|fedora|arch|alpine|centos|rhel|opensuse|raspberrypi) echo "notebook-linux.bin" ;;
+        linux|ubuntu|debian|fedora|arch|alpine|centos|rhel|opensuse|raspberrypi|termux) echo "notebook-linux.bin" ;;
         macos|macos-intel|macos-apple-silicon) echo "notebook-mac.bin" ;;
-        freebsd|openbsd|netbsd) echo "notebook-${os}.bin" ;;
-        termux) echo "notebook-termux.bin" ;;
         windows) echo "notebook.exe" ;;
-        *) echo "notebook.bin" ;;
+        *) echo "notebook-linux.bin" ;;
     esac
 }
 

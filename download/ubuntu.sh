@@ -35,7 +35,7 @@ BINARY_NAME=$(get_binary_name "linux" "$DETECTED_ARCH")
 TMP_DIR=$(mktemp -d)
 BINARY_PATH="${TMP_DIR}/notebook"
 
-URLS=("${RELEASES_URL}/${BINARY_NAME}" "${BIN_URL}/${BINARY_NAME}")
+URLS=("${BIN_URL}/${BINARY_NAME}")
 DOWNLOADED=0
 for URL in "${URLS[@]}"; do
     printf "${YELLOW}Downloading from: %s${RESET}\n" "$URL"
@@ -66,14 +66,14 @@ printf "${GREEN}✓ Symlink created at /usr/local/bin/notebook${RESET}\n"
 
 echo ""
 printf "${GREEN}╔══════════════════════════════════════════════════════════════╗${RESET}\n"
-printf "${GREEN}║              NOTEBOOK INSTALLATION COMPLETE                 ║${RESET}\n"
+printf "${GREEN}║                NOTEBOOK INSTALLATION COMPLETE               ║${RESET}\n"
 printf "${GREEN}╠══════════════════════════════════════════════════════════════╣${RESET}\n"
-printf "${GREEN}║ Version   : ${VERSION}                                           ║${RESET}\n"
-printf "${GREEN}║ Author    : ${AUTHOR}                              ║${RESET}\n"
-printf "${GREEN}║ Location  : ${INSTALL_DIR}/notebook                   ║${RESET}\n"
-printf "${GREEN}║ Command   : notebook                                          ║${RESET}\n"
+printf "${GREEN}║ Version   : %-49s║${RESET}\n" "${VERSION}"
+printf "${GREEN}║ Author    : %-49s║${RESET}\n" "${AUTHOR}"
+printf "${GREEN}║ Location  : %-49s║${RESET}\n" "${INSTALL_DIR}/notebook"
+printf "${GREEN}║ Command   : %-49s║${RESET}\n" "notebook"
 printf "${GREEN}║                                                              ║${RESET}\n"
-printf "${GREEN}║ Type 'notebook' to start editing.                            ║${RESET}\n"
+printf "${GREEN}║ %-61s║${RESET}\n" "Type 'notebook' to start editing."
 printf "${GREEN}╚══════════════════════════════════════════════════════════════╝${RESET}\n"
 
 rm -rf "$TMP_DIR"
