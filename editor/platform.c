@@ -326,7 +326,6 @@ int platform_get_key(void) {
                                 case 'D': return KEY_CTRL_LEFT;
                             }
                         }
-                    }
                     } else {
                         char final_char;
                         if (read(STDIN_FILENO, &final_char, 1) == 0) return KEY_ESCAPE;
