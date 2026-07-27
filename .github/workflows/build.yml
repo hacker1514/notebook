@@ -2,7 +2,8 @@ name: Build Notebook
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -15,27 +16,30 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            output: notebook-linux
+            artifact: notebook-linux
+            output: notebook
+
           - os: macos-latest
-            output: notebook-macos
+            artifact: notebook-macos
+            output: notebook
+
           - os: windows-latest
+            artifact: notebook-windows
             output: notebook.exe
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup MSYS2 (Windows)
+      - name: Setup MSYS2
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
           update: true
-          install: >-
-            mingw-w64-x86_64-gcc
+          install: mingw-w64-x86_64-gcc
 
-      - name: Build (Linux/macOS)
+      - name: Build Linux/macOS
         if: runner.os != 'Windows'
         run: |
           gcc -Wall -Wextra -std=c99 \
@@ -59,7 +63,7 @@ jobs:
             editor/help.c \
             -o "${{ matrix.output }}"
 
-      - name: Build (Windows)
+      - name: Build Windows
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
@@ -87,24 +91,51 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.output }}
+          name: ${{ matrix.artifact }}
           path: ${{ matrix.output }}
 
-      - name: Copy binary to bin (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: |
-          mkdir -p bin
-          cp "${{ matrix.output }}" "bin/${{ matrix.output }}"
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: Copy binary to bin (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          New-Item -ItemType Directory -Force -Path bin | Out-Null
-          Copy-Item notebook.exe bin\notebook.exe
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Linux
+        uses: actions/download-artifact@v4
+        with:
+          name: notebook-linux
+          path: bin
+
+      - name: Rename Linux
+        run: mv bin/notebook bin/notebook-linux
+
+      - name: Download macOS
+        uses: actions/download-artifact@v4
+        with:
+          name: notebook-macos
+          path: bin
+
+      - name: Rename macOS
+        run: mv bin/notebook bin/notebook-macos
+
+      - name: Download Windows
+        uses: actions/download-artifact@v4
+        with:
+          name: notebook-windows
+          path: bin
 
       - name: Commit binaries
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update compiled binaries"
-          file_pattern: bin/*
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add bin
+
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+
+          git commit -m "Update compiled binaries"
+          git push
