@@ -1,76 +1,29 @@
-name: Build Notebook
+- name: Build
+  shell: bash
+  run: |
+    set -x
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+    gcc --version
 
-jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    ls -R
 
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install GCC (Windows)
-        if: runner.os == 'Windows'
-        uses: egor-tensin/setup-mingw@v2
-
-      - name: Build
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            gcc -Wall -Wextra -std=c99 \
-              editor/main.c \
-              editor/editor.c \
-              editor/platform.c \
-              editor/terminal.c \
-              editor/screen.c \
-              editor/buffer.c \
-              editor/file.c \
-              editor/cursor.c \
-              editor/prompt.c \
-              editor/undo.c \
-              editor/syntax.c \
-              editor/highlight.c \
-              editor/search.c \
-              editor/theme.c \
-              editor/plugins.c \
-              editor/clipboard.c \
-              editor/command.c \
-              editor/help.c \
-              -o notebook.exe
-          else
-            gcc -Wall -Wextra -std=c99 \
-              editor/main.c \
-              editor/editor.c \
-              editor/platform.c \
-              editor/terminal.c \
-              editor/screen.c \
-              editor/buffer.c \
-              editor/file.c \
-              editor/cursor.c \
-              editor/prompt.c \
-              editor/undo.c \
-              editor/syntax.c \
-              editor/highlight.c \
-              editor/search.c \
-              editor/theme.c \
-              editor/plugins.c \
-              editor/clipboard.c \
-              editor/command.c \
-              editor/help.c \
-              -o notebook
-          fi
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: notebook-${{ runner.os }}
-          path: |
-            notebook
-            notebook.exe
+    gcc -Wall -Wextra -std=c99 \
+      editor/main.c \
+      editor/editor.c \
+      editor/platform.c \
+      editor/terminal.c \
+      editor/screen.c \
+      editor/buffer.c \
+      editor/file.c \
+      editor/cursor.c \
+      editor/prompt.c \
+      editor/undo.c \
+      editor/syntax.c \
+      editor/highlight.c \
+      editor/search.c \
+      editor/theme.c \
+      editor/plugins.c \
+      editor/clipboard.c \
+      editor/command.c \
+      editor/help.c \
+      -o notebook
