@@ -1,29 +1,82 @@
-- name: Build
-  shell: bash
-  run: |
-    set -x
+name: Build Notebook
 
-    gcc --version
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
-    ls -R
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
 
-    gcc -Wall -Wextra -std=c99 \
-      editor/main.c \
-      editor/editor.c \
-      editor/platform.c \
-      editor/terminal.c \
-      editor/screen.c \
-      editor/buffer.c \
-      editor/file.c \
-      editor/cursor.c \
-      editor/prompt.c \
-      editor/undo.c \
-      editor/syntax.c \
-      editor/highlight.c \
-      editor/search.c \
-      editor/theme.c \
-      editor/plugins.c \
-      editor/clipboard.c \
-      editor/command.c \
-      editor/help.c \
-      -o notebook
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install GCC (Windows)
+        if: runner.os == 'Windows'
+        uses: egor-tensin/setup-mingw@v2
+
+      - name: Build (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          gcc -Wall -Wextra -std=c99 \
+            editor/main.c \
+            editor/editor.c \
+            editor/platform.c \
+            editor/terminal.c \
+            editor/screen.c \
+            editor/buffer.c \
+            editor/file.c \
+            editor/cursor.c \
+            editor/prompt.c \
+            editor/undo.c \
+            editor/syntax.c \
+            editor/highlight.c \
+            editor/search.c \
+            editor/theme.c \
+            editor/plugins.c \
+            editor/clipboard.c \
+            editor/command.c \
+            editor/help.c \
+            -o notebook
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          gcc -Wall -Wextra -std=c99 \
+            editor/main.c \
+            editor/editor.c \
+            editor/platform.c \
+            editor/terminal.c \
+            editor/screen.c \
+            editor/buffer.c \
+            editor/file.c \
+            editor/cursor.c \
+            editor/prompt.c \
+            editor/undo.c \
+            editor/syntax.c \
+            editor/highlight.c \
+            editor/search.c \
+            editor/theme.c \
+            editor/plugins.c \
+            editor/clipboard.c \
+            editor/command.c \
+            editor/help.c \
+            -o notebook.exe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-${{ runner.os }}
+          path: |
+            notebook
+            notebook.exe
